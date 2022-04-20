@@ -46,7 +46,8 @@ public class Rotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    	if(rotate){
+    
+        if(rotate){
     		 transform.Rotate(transform.up * Time.deltaTime * 45f, Space.Self);
     	}
 
@@ -73,7 +74,7 @@ public class Rotate : MonoBehaviour
             return new Color((20/255.0f), (20 / 255.0f), (20 / 255.0f));
 
         if (c == Square.DARK_GREEN)
-            return new Color((158 / 255.0f), (178 / 255.0f), (55 / 255.0f));
+            return new Color((53 / 255.0f), (121 / 255.0f), (33 / 255.0f));
 
         if (c == Square.GREEN)
             return new Color((158 / 255.0f), (178 / 255.0f), (55 / 255.0f));

@@ -20,6 +20,7 @@ public class BoardGame
             boardGame = new Square[boardGameSize, boardGameSize];
             snake = new Queue<Pair>();
             snake.Enqueue(new Pair(7, 7));
+        
             continueMoving = true;
             direction = Square.RIGHT;
 
@@ -126,7 +127,6 @@ public class BoardGame
 
             while(continueMoving){
                 Thread.Sleep(400);
-                Debug.Log("Hola!");
                 move();
             }
            
@@ -135,118 +135,137 @@ public class BoardGame
         public void move(){
 
 
-            Queue<Pair> temp = new Queue<Pair>();
-            Pair p = snake.Peek();
-            int i = p.getFirst();
-            int j = p.getSecond();
+            try{
 
-            switch (direction)
-            {
+                Queue<Pair> temp = new Queue<Pair>();
+                Pair p = snake.Peek();
+                int i = p.getFirst();
+                int j = p.getSecond();
 
-                case Square.UP:
-                    j--;
-                    break;
-
-                case Square.DOWN:
-                    j++;
-                    break;
-
-                case Square.LEFT:
-                    i--;
-                    break;
-
-                case Square.RIGHT:
-                    i++;
-                    break;
-
-            }
-
-            int limit = 1;
-
-            if (boardGame[i,j].getCurrentColor() == Square.RED)
-            {
-                limit = 0;
-                setEnemy();
-            }
-            else if (boardGame[i,j].getCurrentColor() == Square.GREEN)
-            {
-                continueMoving = false;
-                //PERDIOOO --------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            }
-
-            temp.Enqueue(new Pair(i, j));
-
-            int tailI = 0;
-            int tailJ = 0;
-
-            while (snake.Count > limit)
-            {
-
-                p = snake.Dequeue();
-                temp.Enqueue(p);
-                tailI = p.getFirst();
-                tailJ = p.getSecond();
-
-            }
-
-            if (snake.Count>0)
-            {
-
-                p = snake.Dequeue();
-                i = p.getFirst();
-                j = p.getSecond();
-                boardGame[i,j].setSnake(false);
-
-            }
-            else
-            {
-                if (tailI < (boardGameSize-1) && tailI > 0 && tailJ < (boardGameSize-1) && tailJ > 0)
+                switch (direction)
                 {
 
-                    if (direction == Square.UP)
+                    case Square.UP:
+                        j--;
+                        break;
+
+                    case Square.DOWN:
+                        j++;
+                        break;
+
+                    case Square.LEFT:
+                        i--;
+                        break;
+
+                    case Square.RIGHT:
+                        i++;
+                        break;
+
+                }
+
+                int limit = 1;
+
+                if (boardGame[i, j].getCurrentColor() == Square.RED)
+                {
+                    limit = 0;
+                    setEnemy();
+                }
+                else if (boardGame[i, j].getCurrentColor() == Square.GREEN)
+                {
+                    continueMoving = false;
+                    //PERDIOOO --------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                }
+
+                temp.Enqueue(new Pair(i, j));
+
+                int tailI = 0;
+                int tailJ = 0;
+
+                while (snake.Count > limit)
+                {
+
+                    p = snake.Dequeue();
+                    temp.Enqueue(p);
+                    tailI = p.getFirst();
+                    tailJ = p.getSecond();
+
+                }
+
+                if (snake.Count > 0)
+                {
+
+                    p = snake.Dequeue();
+                    i = p.getFirst();
+                    j = p.getSecond();
+                    boardGame[i, j].setSnake(false);
+
+                }
+                else
+                {
+                    if (tailI < (boardGameSize - 1) && tailI > 0 && tailJ < (boardGameSize - 1) && tailJ > 0)
                     {
-                        tailJ++;
-                        boardGame[tailI,tailJ].setSnake(false);
-                    }
-                    else if (direction == Square.DOWN)
-                    {
-                        tailJ--;
-                        boardGame[tailI,tailJ].setSnake(false);
-                    }
-                    else if (direction == Square.RIGHT)
-                    {
-                        tailI--;
-                        boardGame[tailI,tailJ].setSnake(false);
-                    }
-                    else
-                    {
-                        tailI++;
-                        boardGame[tailI,tailJ].setSnake(false);
+
+                        if (direction == Square.UP)
+                        {
+                            tailJ++;
+                            boardGame[tailI, tailJ].setSnake(false);
+                        }
+                        else if (direction == Square.DOWN)
+                        {
+                            tailJ--;
+                            boardGame[tailI, tailJ].setSnake(false);
+                        }
+                        else if (direction == Square.RIGHT)
+                        {
+                            tailI--;
+                            boardGame[tailI, tailJ].setSnake(false);
+                        }
+                        else
+                        {
+                            tailI++;
+                            boardGame[tailI, tailJ].setSnake(false);
+                        }
+
                     }
 
                 }
 
-            }
+                snake = temp;
 
-            snake = temp;
 
-           
-            
-            foreach (Pair pair in snake)
+
+                foreach (Pair pair in snake)
+                {
+                    i = pair.getFirst();
+                    j = pair.getSecond();
+
+                    boardGame[i, j].setSnake(true);
+                }
+                p = snake.Peek();
+                i = p.getFirst();
+                j = p.getSecond();
+
+                boardGame[i, j].setCurrentColor(Square.DARK_GREEN);
+
+            }catch(IndexOutOfRangeException ex)
             {
-                i = pair.getFirst();
-                j = pair.getSecond();
-
-                boardGame[i,j].setSnake(true);
+                continueMoving = false;
+                gameOver();
             }
-            p = snake.Peek();
-            i = p.getFirst();
-            j = p.getSecond();
-
-            boardGame[i,j].setCurrentColor(Square.DARK_GREEN);
+            
         }
 
     
+        public void gameOver(){
+            for (float i = 0f; i < boardGame.GetLength(0); i++)
+            {
+                for (float j = 0f; j < boardGame.GetLength(1); j++)
+                {
+                    boardGame[(int)i,(int)j].setCurrentColor(Square.RED);
+               
+                }
+            }
+        }
 
         public Square[,] getBoardGame()
         {
