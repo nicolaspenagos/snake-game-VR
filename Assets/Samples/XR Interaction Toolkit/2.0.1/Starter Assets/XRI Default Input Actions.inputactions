@@ -507,6 +507,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MoveSnake",
+                    "type": "Value",
+                    "id": "c52b12dc-b70f-443a-83e8-d4a8bd43db01",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -562,6 +571,17 @@
                     "processors": "StickDeadzone",
                     "groups": "Continuous Move",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e6cbce4e-6ff7-4557-94c3-fcf2218f1437",
+                    "path": "<XRController>{LeftHand}/primary2DAxis",
+                    "interactions": "",
+                    "processors": "StickDeadzone",
+                    "groups": "Generic XR Controller;Continuous Move",
+                    "action": "MoveSnake",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
