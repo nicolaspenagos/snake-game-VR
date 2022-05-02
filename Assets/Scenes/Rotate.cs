@@ -76,23 +76,23 @@ public class Rotate : MonoBehaviour
         Debug.Log("X:"+x+" y:"+y);
 
         if (x >= 0.9) {
-            boardGame.changeDirection(Square.RIGHT);
-            Debug.Log("RIGHT");
+            boardGame.changeDirection(Square.LEFT);
+          
         }
         if (x <= -0.9)
         {
-            boardGame.changeDirection(Square.LEFT);
-            Debug.Log("LEFT");
+            boardGame.changeDirection(Square.RIGHT);
+       
         }
         if (y >= 0.9)
         {
-            boardGame.changeDirection(Square.UP);
-            Debug.Log("UP");
+            boardGame.changeDirection(Square.DOWN);
+         
         }
         if (y <= -0.9)
         {
-            boardGame.changeDirection(Square.DOWN);
-            Debug.Log("DOWN");
+            boardGame.changeDirection(Square.UP);
+     
         }
 
     }
@@ -103,10 +103,11 @@ public class Rotate : MonoBehaviour
 
 
         update += Time.deltaTime;
-        if (update > 0.5f)
+        if (update > 0.3f)
         {
             update = 0.0f;
-            boardGame.move();
+            if(!rotate)
+             boardGame.move();
         }
 
 
@@ -114,17 +115,21 @@ public class Rotate : MonoBehaviour
     		 transform.Rotate(transform.up * Time.deltaTime * 45f, Space.Self);
     	}
 
-        for (int i = 0; i < cubesMatrix.GetLength(0); i++)
+        if(cubesMatrix!=null)
         {
-            for (int j = 0; j < cubesMatrix.GetLength(1); j++)
+            for (int i = 0; i < cubesMatrix.GetLength(0); i++)
             {
-                Square cube = matrix[i, j];
-                GameObject cubeObject = cubesMatrix[i, j];
-                cubeObject.GetComponent<MeshRenderer>().material.color = getColor(cube.getCurrentColor());
+                for (int j = 0; j < cubesMatrix.GetLength(1); j++)
+                {
+                    Square cube = matrix[i, j];
+                    GameObject cubeObject = cubesMatrix[i, j];
+                    cubeObject.GetComponent<MeshRenderer>().material.color = getColor(cube.getCurrentColor());
 
-              
+
+                }
             }
         }
+       
         
        
     }
@@ -154,12 +159,35 @@ public class Rotate : MonoBehaviour
             firstGrab = true;
             startGame();
         }
+        Debug.Log(boardGame.getIsGameOver());
+        if (boardGame.getIsGameOver())
+        {
+            Debug.Log("start again");
+            destroyMatrix();
+            startGame();
+        }
 
-    	if(rotate){
+        if (rotate){
     		rend.material.color = Color.green;
     	}else{
     		rend.material.color = original;
     	}
     	rotate = !rotate;
+    }
+
+    public void destroyMatrix()
+    {
+        for (int i = 0; i < cubesMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < cubesMatrix.GetLength(1); j++)
+            {
+         
+                GameObject cubeObject = cubesMatrix[i, j];
+                Destroy(cubeObject);
+
+            }
+        }
+
+        cubesMatrix = null;
     }
 }

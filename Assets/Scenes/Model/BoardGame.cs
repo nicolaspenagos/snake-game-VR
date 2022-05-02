@@ -10,8 +10,8 @@ public class BoardGame
         private Queue<Pair> snake;
         private int boardGameSize = 15;
         private float cubeSize = 0.3f;
-        private Thread movementThread;
         private bool continueMoving;
+        private bool isGameOver;
         private char direction;
 
 
@@ -24,6 +24,7 @@ public class BoardGame
             snake.Enqueue(new Pair(7, 7));
         
             continueMoving = true;
+            isGameOver = false;
             direction = Square.DOWN;
 
             loadBoardGame();
@@ -204,6 +205,7 @@ public class BoardGame
                     else if (boardGame[i, j].getCurrentColor() == Square.GREEN)
                     {
                         continueMoving = false;
+                        isGameOver = true;
                         //PERDIOOO --------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     }
 
@@ -281,6 +283,7 @@ public class BoardGame
                 }catch(IndexOutOfRangeException ex)
                 {
                     continueMoving = false;
+                    isGameOver = true;
                     gameOver();
                 }
 
@@ -307,6 +310,11 @@ public class BoardGame
 
         public int getBoardGameSize(){
             return boardGameSize;
+        }
+
+        public bool getIsGameOver()
+        {
+            return isGameOver;
         }
 
 
